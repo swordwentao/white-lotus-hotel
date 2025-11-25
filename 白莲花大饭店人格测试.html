@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>白莲花大饭店 | 入住人格测试</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap');
+    
+    :root {
+      --bg: #0a0806;
+      --text: #e8e0d0;
+      --accent: #c9a77c;
+      --border: #3d3630;
+      --card-bg: #1a1612;
+    }
+    
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Noto Serif SC', serif;
+      line-height: 1.8;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    
+    .container {
+      padding: 2rem 0;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--accent);
+      padding-bottom: 1.5rem;
+    }
+    
+    .title {
+      font-size: 2.2rem;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.1em;
+    }
+    
+    .subtitle {
+      font-size: 1.2rem;
+      color: var(--accent);
+      font-weight: normal;
+      letter-spacing: 0.05em;
+    }
+    
+    .logo {
+      width: 80px;
+      margin: 1rem auto;
+      display: block;
+    }
+    
+    .intro {
+      background: rgba(201, 167, 124, 0.1);
+      border-left: 3px solid var(--accent);
+      padding: 1.5rem;
+      margin: 2rem 0;
+      font-style: italic;
+    }
+    
+    .question-container {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 0;
+      padding: 2rem;
+      margin: 2rem 0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      display: none;
+      position: relative;
+    }
+    
+    .question-container.active {
+      display: block;
+      animation: fadeIn 0.8s;
+    }
+    
+    .question-number {
+      position: absolute;
+      top: -15px;
+      left: 20px;
+      background: var(--accent);
+      color: var(--bg);
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+    
+    .question-text {
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+    
+    .options {
+      margin: 1.5rem 0;
+    }
+    
+    .option-item {
+      margin-bottom: 1rem;
+      position: relative;
+    }
+    
+    .option-item input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+    }
+    
+    .option-item label {
+      display: block;
+      padding: 1rem 1rem 1rem 3rem;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      position: relative;
+      transition: all 0.3s;
+    }
+    
+    .option-item label:hover {
+      background: rgba(201, 167, 124, 0.1);
+    }
+    
+    .option-item label::before {
+      content: '';
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      border: 1px solid var(--accent);
+      border-radius: 50%;
+    }
+    
+    .option-item input[type="radio"]:checked + label {
+      background: rgba(201, 167, 124, 0.2);
+      border-color: var(--accent);
+    }
+    
+    .option-item input[type="radio"]:checked + label::before {
+      background: var(--accent);
+    }
+    
+    .navigation {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 2rem;
+    }
+    
+    button {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--accent);
+      padding: 0.8rem 1.5rem;
+      cursor: pointer;
+      font-family: 'Noto Serif SC', serif;
+      transition: all 0.3s;
+      letter-spacing: 0.05em;
+    }
+    
+    button:hover {
+      background: rgba(201, 167, 124, 0.2);
+    }
+    
+    button.next {
+      background: var(--accent);
+      color: var(--bg);
+    }
+    
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .progress-container {
+      height: 4px;
+      background: var(--border);
+      margin: 2rem 0;
+    }
+    
+    .progress-bar {
+      height: 100%;
+      background: var(--accent);
+      transition: width 0.5s;
+    }
+    
+    #result {
+      display: none;
+      animation: fadeIn 1s;
+    }
+    
+    .result-card {
+      background: var(--card-bg);
+      border: 1px solid var(--accent);
+      padding: 2rem;
+    }
+    
+    .result-header {
+      text-align: center;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--accent);
+      padding-bottom: 1rem;
+    }
+    
+    .result-title {
+      font-size: 1.5rem;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+    
+    .result-content {
+      line-height: 1.8;
+    }
+    
+    .result-image {
+      width: 100px;
+      margin: 1rem auto;
+      display: block;
+      opacity: 0.8;
+    }
+    
+    .restart-btn {
+      display: block;
+      margin: 2rem auto;
+      background: transparent;
+    }
+    
+    .footer {
+      text-align: center;
+      margin-top: 3rem;
+      font-size: 0.9rem;
+      color: rgba(232, 224, 208, 0.6);
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .quote {
+      font-style: italic;
+      text-align: center;
+      margin: 2rem 0;
+      color: var(--accent);
+    }
+    
+    .warning {
+      font-size: 0.8rem;
+      text-align: center;
+      margin-top: 2rem;
+      color: rgba(232, 224, 208, 0.6);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1 class="title">白莲花大饭店</h1>
+      <h2 class="subtitle">入住人格测试</h2>
+      <div class="quote">"顺利入住，然后成为猎物"</div>
+    </div>
+    
+    <div class="intro">
+      欢迎来到白莲花大饭店。在您完成入住登记前，请先完成这份简短的人格测试。这将帮助我们为您安排最适合的房间和服务。请记住，您的每一个选择都将被记录在案。
+    </div>
+    
+    <div class="progress-container">
+      <div id="progress" class="progress-bar" style="width: 10%;"></div>
+    </div>
+    
+    <div id="questionnaire">
+      <div id="q1" class="question-container active">
+        <div class="question-number">1</div>
+        <div class="question-text">您入住酒店的主要目的是什么？</div>
+        <div class="options">
+          <div class="option-item">
+            <input type="radio" name="q1" value="1" id="q1a">
+            <label for="q1a">A. 休闲度假，远离喧嚣</label>
+          </div>
+          <div class="option-item">
+            <input type="radio" name="q1" value="2" id="q1b">
+            <label for="q1b">B. 商务出差，需要安静的工作环境</label>
+          </div>
+          <div class="option-item">
+            <input type="radio" name="q1" value="3" id="q1c">
+            <label for="q1c">C. 寻找刺激，体验不同寻常的经历</label>
+          </div>
+          <div class="option-item">
+            <input type="radio" name="q1" value="4" id="q1d">
+            <label for="q1d">D. 逃避某些事情或某个人</label>
+          </div>
+        </div>
+        <div class="navigation">
+          <button class="prev" disabled>上一题</button>
+          <button class="next" onclick="nextQuestion(1)">下一题</button>
+        </div>
+      </div>
+
+      <div id="q2" class="question-container">
+        <div class="question-number">2</div>
+        <div class="question-text">如果您在酒店走廊发现一本遗落的日记，您会怎么做？</div>
+        <div class="options">
+          <div class="option-item">
+            <input type="radio" name="q2" value="1" id="q2a">
+            <label for="q2a">A. 立即交给前台，不看内容</label>
+          </div>
+          <div class="option-item">
+            <input type="radio" name="q2" value="2" id="q2b">
+            <label for="q2b">B. 翻看几页以确定失主身份，再归还</label>
+          </div>
+          <div class="option-item">
+            <input type="radio" name="q2" value="3" id="q2c">
+            <label for="q2c">C. 带回房间仔细阅读，了解其中秘密</label>
+          </div>
+          <div class="option-item">
+            <input type="radio" name="q2" value="4" id="q2d">
+            <label for="q2d">D. 将它留在原地，假装从未见过</label>
+          </div>
+        </div>
+        <div class="navigation">
+          <button class="prev" onclick="prevQuestion(2)">上一题</button>
+          <button class="next" onclick="nextQuestion(2)">下一题</button>
+        </div>
+      </div>
+
+      <div id="q3" class="question-container">
+        <div class="question-number">3</div>
+        <div class="question-text">您更喜欢哪种类型的房间景观？</div>
+        <div class="options">
+          <div class="option-item">
+            <input type="radio" name="q3" value="1" id="q3a">
+            <label for="q3a">A. 面向大海，能听到海浪声</label>
+          </div>
+          <div class="option-item">
+            <input type="radio" name="q3" value="2" id="q3b">
+            <label for="q3b">B. 俯瞰花园，安静祥和</label>
+          </div>
+          <div class="option-item">
+            <input type="radio" name="q3" value="3" id="q3c">
+            <label for="q3c">C. 面向其他客房，可以观察他人</label>
+          </div>
+          <div class="option-item">
+            <input type="radio" name="q3" value="4" id="q3d">
+            <label for="q3d">D. 无窗房间，完全私密</label>
+          </div>
+        </div>
+        <div class="navigation">
+          <button class="prev" onclick="prevQuestion(3)">上一题</button>
+          <button class="next" onclick="nextQuestion(3)">下一题</button>
+        </div>
+      </div>
+
+      <div id="q4" class="question-container">
+        <div class="question-number">4</div>
+        <div class="question-text">在酒店餐厅用餐时，您会选择：</div>
+        <div class="options">
+          <div class="option-item">
+            <input type="radio" name="q4" value="1" id="q4a">
+            <label for="q4a">A. 坐在角落，能观察全场</label>
+          </div>
+          <div class="option-item">
+            <input type="radio" name="q4" value="2" id="q4b">
+            <label for="q4b">B. 靠窗位置，欣赏风景</label>
+          </div>
+          <div class="option-item">
+            <input type="radio" name="q4" value="3" id="q4c">
+            <label for="q4c">C. 吧台附近，方便与人交谈</label>
+          </div>
+          <div class="option-item">
+            <input type="radio" name="q4" value="4" id="q4d">
+            <label for="q4d">D. 要求客房服务，在房间用餐</label>
+          </div>
+        </div>
+        <div class="navigation">
+          <button class="prev" onclick="prevQuestion(4)">上一题</button>
+          <button class="next" onclick="nextQuestion(4)">下一题</button>
+        </div>
+      </div>
+
+      <div id="q5" class="question-container">
+        <div class="question-number">5</div>
+        <div class="question-text">如果您听到隔壁房间传来可疑的声音，您会：</div>
+        <div class="options">
+          <div class="option-item">
+            <input type="radio" name="q5" value="1" id="q5a">
+            <label for="q5a">A. 立即报告前台或保安</label>
+          </div>
+          <div class="option-item">
+            <input type="radio" name="q5" value="2" id="q5b">
+            <label for="q5b">B. 靠近门或墙壁仔细聆听</label>
+          </div>
+          <div class="option-item">
+            <input type="radio" name="q5" value="3" id="q5c">
+            <label for="q5c">C. 敲门询问是否需要帮助</label>
+          </div>
+          <div class="option-item">
+            <input type="radio" name="q5" value="4" id="q5d">
+            <label for="q5d">D. 不理会，这与您无关</label>
+          </div>
+        </div>
+        <div class="navigation">
+          <button class="prev" onclick="prevQuestion(5)">上一题</button>
+          <button class="next" onclick="nextQuestion(5)">下一题</button>
+        </div>
+      </div>
+
+      <div id="q6" class="question-container">
+        <div class="question-number">6</div>
+        <div class="question-text">您在酒店的保险箱中会存放什么？</div>
+        <div class="options">
+          <div class="option-item">
+            <input type="radio" name="q6" value="1" id="q6a">
+            <label for="q6a">A. 贵重首饰和现金</label>
+          </div>
+          <div class="option-item">
+            <input type="radio" name="q6" value="2" id="q6b">
+            <label for="q6b">B. 护照和重要证件</label>
+          </div>
+          <div class="option-item">
+            <input type="radio" name="q6" value="3" id="q6c">
+            <label for="q6c">C. 私人日记或信件</label>
+          </div>
+          <div class="option-item">
+            <input type="radio" name="q6" value="4" id="q6d">
+            <label for="q6d">D. 一些不便透露的物品</label>
+          </div>
+        </div>
+        <div class="navigation">
+          <button class="prev" onclick="prevQuestion(6)">上一题</button>
+          <button class="next" onclick="nextQuestion(6)">下一题</button>
+        </div>
+      </div>
+
+      <div id="q7" class="question-container">
+        <div class="question-number">7</div>
+        <div class="question-text">酒店员工告诉您，有人曾在您的房间死亡，您会：</div>
+        <div class="options">
+          <div class="option-item">
+            <input type="radio" name="q7" value="1" id="q7a">
+            <label for="q7a">A. 立即要求换房</label>
+          </div>
+          <div class="option-item">
+            <input type="radio" name="q7" value="2" id="q7b">
+            <label for="q7b">B. 询问详细情况，满足好奇心</label>
+          </div>
+          <div class="option-item">
+            <input type="radio" name="q7" value="3" id="q7c">
+            <label for="q7c">C. 感到兴奋，希望能体验超自然现象</label>
+          </div>
+          <div class="option-item">
+            <input type="radio" name="q7" value="4" id="q7d">
+            <label for="q7d">D. 不相信，认为是员工的恶作剧</label>
+          </div>
+        </div>
+        <div class="navigation">
+          <button class="prev" onclick="prevQuestion(7)">上一题</button>
+          <button class="next" onclick="nextQuestion(7)">下一题</button>
+        </div>
+      </div>
+
+      <div id="q8" class="question-container">
+        <div class="question-number">8</div>
+        <div class="question-text">您在酒店房间的镜子中看到一个陌生身影一闪而过，您会：</div>
+        <div class="options">
+          <div class="option-item">
+            <input type="radio" name="q8" value="1" id="q8a">
+            <label for="q8a">A. 认为是疲劳导致的幻觉</label>
+          </div>
+          <div class="option-item">
+            <input type="radio" name="q8" value="2" id="q8b">
+            <label for="q8b">B. 立即检查房间是否有人入侵</label>
+          </div>
+          <div class="option-item">
+            <input type="radio" name="q8" value="3" id="q8c">
+            <label for="q8c">C. 记录下来，认为遇到了超自然现象</label>
+          </div>
+          <div class="option-item">
+            <input type="radio" name="q8" value="4" id="q8d">
+            <label for="q8d">D. 离开房间，要求酒店解释</label>
+          </div>
+        </div>
+        <div class="navigation">
+          <button class="prev" onclick="prevQuestion(8)">上一题</button>
+          <button class="next" onclick="nextQuestion(8)">下一题</button>
+        </div>
+      </div>
+
+      <div id="q9" class="question-container">
+        <div class="question-number">9</div>
+        <div class="question-text">您更喜欢酒店提供哪种类型的阅读材料？</div>
+        <div class="options">
+          <div class="option-item">
+            <input type="radio" name="q9" value="1" id="q9a">
+            <label for="q9a">A. 当地历史和文化介绍</label>
+          </div>
+          <div class="option-item">
+            <input type="radio" name="q9" value="2" id="q9b">
+            <label for="q9b">B. 悬疑或犯罪小说</label>
+          </div>
+          <div class="option-item">
+            <input type="radio" name="q9" value="3" id="q9c">
+            <label for="q9c">C. 前任客人留下的笔记或日记</label>
+          </div>
+          <div class="option-item">
+            <input type="radio" name="q9" value="4" id="q9d">
+            <label for="q9d">D. 酒店的秘密历史和传闻</label>
+          </div>
+        </div>
+        <div class="navigation">
+          <button class="prev" onclick="prevQuestion(9)">上一题</button>
+          <button class="next" onclick="nextQuestion(9)">下一题</button>
+        </div>
+      </div>
+
+      <div id="q10" class="question-container">
+        <div class="question-number">10</div>
+        <div class="question-text">如果您在酒店发现一个隐藏的房间，您会：</div>
+        <div class="options">
+          <div class="option-item">
+            <input type="radio" name="q10" value="1" id="q10a">
+            <label for="q10a">A. 报告给酒店管理层</label>
+          </div>
+          <div class="option-item">
+            <input type="radio" name="q10" value="2" id="q10b">
+            <label for="q10b">B. 独自探索，不告诉任何人</label>
+          </div>
+          <div class="option-item">
+            <input type="radio" name="q10" value="3" id="q10c">
+            <label for="q10c">C. 邀请朋友一起调查</label>
+          </div>
+          <div class="option-item">
+            <input type="radio" name="q10" value="4" id="q10d">
+            <label for="q10d">D. 锁上门，假装从未发现</label>
+          </div>
+        </div>
+        <div class="navigation">
+          <button class="prev" onclick="prevQuestion(10)">上一题</button>
+          <button class="next" onclick="calculateResult()">查看结果</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="result">
+      <div class="result-card">
+        <div class="result-header">
+          <h2 class="result-title">您的白莲花大饭店身份是：</h2>
+          <h3 id="persona-title"></h3>
+        </div>
+        <div class="result-content">
+          <p id="persona-description"></p>
+          <p id="room-assignment"></p>
+        </div>
+      </div>
+      <div class="warning">
+        注意：本测试结果将被记录在酒店档案中。您的房间安排和服务将根据此结果进行调整。
+      </div>
+      <button class="restart-btn" onclick="restartQuiz()">重新测试</button>
+    </div>
+    
+    <div class="footer">
+      © 白莲花大饭店 | SO? TEAM | 罪案氛围型制品
+    </div>
+  </div>
+
+  <script>
+    let currentQuestion = 1;
+    const totalQuestions = 10;
+    
+    // 更新进度条
+    function updateProgress() {
+      const progressPercent = (currentQuestion / totalQuestions) * 100;
+      document.getElementById('progress').style.width = progressPercent + '%';
+    }
+    
+    // 下一题
+    function nextQuestion(qNum) {
+      // 检查是否已选择答案
+      const selectedOption = document.querySelector(`input[name="q${qNum}"]:checked`);
+      if (!selectedOption) {
+        alert('请选择一个选项后再继续');
+        return;
+      }
+      
+      // 隐藏当前题目，显示下一题
+      document.getElementById(`q${qNum}`).classList.remove('active');
+      currentQuestion++;
+      document.getElementById(`q${currentQuestion}`).classList.add('active');
+      updateProgress();
+    }
+    
+    // 上一题
+    function prevQuestion(qNum) {
+      document.getElementById(`q${qNum}`).classList.remove('active');
+      currentQuestion--;
+      document.getElementById(`q${currentQuestion}`).classList.add('active');
+      updateProgress();
+    }
+    
+    // 计算结果
+    function calculateResult() {
+      // 检查最后一题是否已选择答案
+      const selectedOption = document.querySelector('input[name="q10"]:checked');
+      if (!selectedOption) {
+        alert('请选择一个选项后再继续');
+        return;
+      }
+      
+      // 计算各选项得分
+      let scores = {A: 0, B: 0, C: 0, D: 0};
+      
+      for (let i = 1; i <= totalQuestions; i++) {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        if (selected) {
+          const value = parseInt(selected.value);
+          if (value === 1) scores.A++;
+          else if (value === 2) scores.B++;
+          else if (value === 3) scores.C++;
+          else if (value === 4) scores.D++;
+        }
+      }
+      
+      // 确定最高分类型
+      let maxType = 'A';
+      let maxScore = scores.A;
+      
+      if (scores.B > maxScore) {
+        maxType = 'B';
+        maxScore = scores.B;
+      }
+      if (scores.C > maxScore) {
+        maxType = 'C';
+        maxScore = scores.C;
+      }
+      if (scores.D > maxScore) {
+        maxType = 'D';
+        maxScore = scores.D;
+      }
+      
+      // 隐藏问卷，显示结果
+      document.getElementById('questionnaire').style.display = 'none';
+      document.getElementById('result').style.display = 'block';
+      
+      // 根据类型显示不同结果
+      const personaTitle = document.getElementById('persona-title');
+      const personaDesc = document.getElementById('persona-description');
+      const roomAssignment = document.getElementById('room-assignment');
+      
+      if (maxType === 'A') {
+        personaTitle.textContent = "谨慎的观察者";
+        personaDesc.textContent = "您是一位谨慎且富有责任感的客人，总是遵循规则，尊重他人的隐私。您注重安全和秩序，倾向于在发现异常情况时寻求官方帮助。在白莲花大饭店，您可能会是第一个发现不对劲的人，但也可能是最后一个相信真相的人。";
+        roomAssignment.textContent = "房间安排：我们将为您安排在二楼海景房，靠近电梯和紧急出口。房间配备完整的安全设施和详细的酒店指南。";
+      } else if (maxType === 'B') {
+        personaTitle.textContent = "好奇的探索者";
+        personaDesc.textContent = "您天生具有强烈的好奇心，喜欢探索未知和解开谜团。虽然您通常会尊重规则，但当面对神秘事件时，您难以抵抗一探究竟的诱惑。在白莲花大饭店，您可能会主动调查那些不寻常的现象，这可能会让您发现隐藏的真相，也可能让您陷入危险。";
+        roomAssignment.textContent = "房间安排：我们将为您安排在四楼的角落套房，靠近历史悠久的西翼。房间保留了部分原始建筑特色，并提供酒店历史档案供您阅读。";
+      } else if (maxType === 'C') {
+        personaTitle.textContent = "冒险的参与者";
+        personaDesc.textContent = "您渴望刺激和非凡体验，愿意主动参与到各种情境中。您社交能力强，喜欢与人交流，分享经历。在白莲花大饭店，您可能会成为故事的积极参与者，与其他客人和员工建立联系，但这也可能让您卷入复杂的人际关系网。";
+        roomAssignment.textContent = "房间安排：我们将为您安排在六楼的豪华套房，靠近社交区域和酒吧。房间设计独特，富有艺术气息，并提供24小时管家服务。";
+      } else {
+        personaTitle.textContent = "神秘的旁观者";
+        personaDesc.textContent = "您珍视隐私和独立，倾向于保持距离观察事态发展。您有自己的秘密和动机，不轻易与人分享。在白莲花大饭店，您可能会成为一个难以捉摸的角色，让人猜不透您的真实想法，但您敏锐的洞察力可能会让您看透他人的伪装。";
+        roomAssignment.textContent = "房间安排：我们将为您安排在顶层的隐蔽套房，与其他客房相对独立。房间提供最高级别的隐私保护，并配备私人阳台和独立入口。";
+      }
+    }
+    
+    // 重新测试
+    function restartQuiz() {
+      // 重置所有选项
+      const allRadios = document.querySelectorAll('input[type="radio"]');
+      allRadios.forEach(radio => {
+        radio.checked = false;
+      });
+      
+      // 重置到第一题
+      document.getElementById('result').style.display = 'none';
+      document.getElementById('questionnaire').style.display = 'block';
+      document.querySelector('.question-container.active').classList.remove('active');
+      currentQuestion = 1;
+      document.getElementById('q1').classList.add('active');
+      updateProgress();
+    }
+    
+    // 初始化进度条
+    updateProgress();
+  </script>
+</body>
+</html>
